@@ -1,0 +1,77 @@
+// Controllers/UsersController.cs
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using SocialMediaApp.DTOs;
+using SocialMediaApp.Models;
+
+namespace SocialMediaApp.Controllers
+{
+    [Authorize]
+    [Route("api/users")]
+    [ApiController]
+    public class UsersController : ControllerBase
+    {
+        private readonly UserManager<User> _userManager;
+        private readonly IMapper _mapper;
+
+        public UsersController(UserManager<User> userManager, IMapper mapper)
+        {
+            _userManager = userManager;
+            _mapper = mapper;
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<UserDto>> GetUser(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return _mapper.Map<UserDto>(user);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(string id, [FromBody] UserDto userDto)
+        {
+            if (id != User.FindFirst(ClaimTypes.NameIdentifier)?.Value)
+            {
+                return Unauthorized();
+            }
+
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            user.Name = userDto.Name;
+            user.Bio = userDto.Bio;
+            user.ProfilePicture = userDto.ProfilePicture;
+
+            var result = await _userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+
+            return NoContent();
+        }
+
+        [HttpGet("search")]
+        public async Task<ActionResult<IEnumerable<UserDto>>> SearchUsers([FromQuery] string name)
+        {
+            var users = _userManager.Users
+                .Where(u => u.Name.Contains(name))
+                .ToList();
+
+            return _mapper.Map<List<UserDto>>(users);
+        }
+    }
+}
