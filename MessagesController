@@ -1,0 +1,93 @@
+// Controllers/MessagesController.cs
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SocialMediaApp.Data;
+using SocialMediaApp.DTOs;
+using SocialMediaApp.Models;
+
+namespace SocialMediaApp.Controllers
+{
+    [Authorize]
+    [Route("api/messages")]
+    [ApiController]
+    public class MessagesController : ControllerBase
+    {
+        private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
+
+        public MessagesController(ApplicationDbContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<MessageDto>> SendMessage(CreateMessageDto createMessageDto)
+        {
+            var senderId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var sender = await _context.Users.FindAsync(senderId);
+            var receiver = await _context.Users.FindAsync(createMessageDto.ReceiverId);
+
+            if (sender == null || receiver == null)
+            {
+                return BadRequest("Invalid sender or receiver");
+            }
+
+            var message = new Message
+            {
+                SenderId = senderId,
+                ReceiverId = createMessageDto.ReceiverId,
+                Content = createMessageDto.Content,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _context.Messages.Add(message);
+
+            // Create notification
+            var notification = new Notification
+            {
+                UserId = createMessageDto.ReceiverId,
+                Type = NotificationType.Comment, // You might want a Message type
+                Content = $"{sender.Name} sent you a message",
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _context.Notifications.Add(notification);
+
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<MessageDto>(message);
+        }
+
+        [HttpGet("{userId}")]
+        public async Task<ActionResult<IEnumerable<MessageDto>>> GetMessages(string userId)
+        {
+            var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var messages = await _context.Messages
+                .Include(m => m.Sender)
+                .Include(m => m.Receiver)
+                .Where(m => 
+                    (m.SenderId == currentUserId && m.ReceiverId == userId) ||
+                    (m.SenderId == userId && m.ReceiverId == currentUserId))
+                .OrderBy(m => m.CreatedAt)
+                .ToListAsync();
+
+            // Mark received messages as read
+            var unreadMessages = messages
+                .Where(m => m.ReceiverId == currentUserId && !m.IsRead)
+                .ToList();
+
+            foreach (var message in unreadMessages)
+            {
+                message.IsRead = true;
+            }
+
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<List<MessageDto>>(messages);
+        }
+    }
+}
