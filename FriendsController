@@ -1,0 +1,158 @@
+// Controllers/FriendsController.cs
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SocialMediaApp.Data;
+using SocialMediaApp.DTOs;
+using SocialMediaApp.Models;
+
+namespace SocialMediaApp.Controllers
+{
+    [Authorize]
+    [Route("api/friends")]
+    [ApiController]
+    public class FriendsController : ControllerBase
+    {
+        private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
+
+        public FriendsController(ApplicationDbContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
+
+        [HttpPost("request/{userId}")]
+        public async Task<ActionResult<FriendshipDto>> SendFriendRequest(string userId)
+        {
+            var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (currentUserId == userId)
+            {
+                return BadRequest("You cannot send a friend request to yourself");
+            }
+
+            var existingFriendship = await _context.Friendships
+                .FirstOrDefaultAsync(f => 
+                    (f.RequesterId == currentUserId && f.AddresseeId == userId) ||
+                    (f.RequesterId == userId && f.AddresseeId == currentUserId));
+
+            if (existingFriendship != null)
+            {
+                return BadRequest("Friend request already exists or you are already friends");
+            }
+
+            var friendship = new Friendship
+            {
+                RequesterId = currentUserId,
+                AddresseeId = userId,
+                Status = FriendshipStatus.Pending,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _context.Friendships.Add(friendship);
+
+            // Create notification
+            var requester = await _context.Users.FindAsync(currentUserId);
+            var notification = new Notification
+            {
+                UserId = userId,
+                Type = NotificationType.FriendRequest,
+                Content = $"{requester.Name} sent you a friend request",
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _context.Notifications.Add(notification);
+
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<FriendshipDto>(friendship);
+        }
+
+        [HttpPost("accept/{requestId}")]
+        public async Task<ActionResult<FriendshipDto>> AcceptFriendRequest(int requestId)
+        {
+            var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var friendship = await _context.Friendships
+                .FirstOrDefaultAsync(f => f.Id == requestId && f.AddresseeId == currentUserId);
+
+            if (friendship == null)
+            {
+                return NotFound();
+            }
+
+            if (friendship.Status == FriendshipStatus.Accepted)
+            {
+                return BadRequest("Friend request already accepted");
+            }
+
+            friendship.Status = FriendshipStatus.Accepted;
+            await _context.SaveChangesAsync();
+
+            // Create notification
+            var addressee = await _context.Users.FindAsync(currentUserId);
+            var notification = new Notification
+            {
+                UserId = friendship.RequesterId,
+                Type = NotificationType.FriendRequest,
+                Content = $"{addressee.Name} accepted your friend request",
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _context.Notifications.Add(notification);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<FriendshipDto>(friendship);
+        }
+
+        [HttpDelete("remove/{friendId}")]
+        public async Task<IActionResult> RemoveFriend(string friendId)
+        {
+            var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var friendship = await _context.Friendships
+                .FirstOrDefaultAsync(f => 
+                    (f.RequesterId == currentUserId && f.AddresseeId == friendId) ||
+                    (f.RequesterId == friendId && f.AddresseeId == currentUserId));
+
+            if (friendship == null)
+            {
+                return NotFound();
+            }
+
+            _context.Friendships.Remove(friendship);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpGet("{userId}")]
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetFriends(string userId)
+        {
+            var friendships = await _context.Friendships
+                .Include(f => f.Requester)
+                .Include(f => f.Addressee)
+                .Where(f => 
+                    (f.RequesterId == userId || f.AddresseeId == userId) &&
+                    f.Status == FriendshipStatus.Accepted)
+                .ToListAsync();
+
+            var friends = new List<User>();
+            foreach (var friendship in friendships)
+            {
+                if (friendship.RequesterId == userId)
+                {
+                    friends.Add(friendship.Addressee);
+                }
+                else
+                {
+                    friends.Add(friendship.Requester);
+                }
+            }
+
+            return _mapper.Map<List<UserDto>>(friends);
+        }
+    }
+}
