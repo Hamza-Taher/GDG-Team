@@ -1,0 +1,142 @@
+// DTOs/UserDto.cs
+namespace SocialMediaApp.DTOs
+{
+    public class UserDto
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string ProfilePicture { get; set; }
+        public string Bio { get; set; }
+        public DateTime CreatedAt { get; set; }
+    }
+
+    public class RegisterDto
+    {
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+    }
+
+    public class LoginDto
+    {
+        public string Email { get; set; }
+        public string Password { get; set; }
+    }
+}
+
+// DTOs/PostDto.cs
+namespace SocialMediaApp.DTOs
+{
+    public class PostDto
+    {
+        public int Id { get; set; }
+        public string Content { get; set; }
+        public string ImageUrl { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public UserDto User { get; set; }
+        public int LikeCount { get; set; }
+        public int CommentCount { get; set; }
+    }
+
+    public class CreatePostDto
+    {
+        public string Content { get; set; }
+        public IFormFile Image { get; set; }
+    }
+}
+
+// DTOs/CommentDto.cs
+namespace SocialMediaApp.DTOs
+{
+    public class CommentDto
+    {
+        public int Id { get; set; }
+        public string Content { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public UserDto User { get; set; }
+        public int ReplyCount { get; set; }
+    }
+
+    public class CreateCommentDto
+    {
+        public int PostId { get; set; }
+        public string Content { get; set; }
+    }
+}
+
+// DTOs/ReplyDto.cs
+namespace SocialMediaApp.DTOs
+{
+    public class ReplyDto
+    {
+        public int Id { get; set; }
+        public string Content { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public UserDto User { get; set; }
+    }
+
+    public class CreateReplyDto
+    {
+        public int CommentId { get; set; }
+        public string Content { get; set; }
+    }
+}
+
+// DTOs/FriendshipDto.cs
+namespace SocialMediaApp.DTOs
+{
+    public class FriendshipDto
+    {
+        public int Id { get; set; }
+        public UserDto Requester { get; set; }
+        public UserDto Addressee { get; set; }
+        public string Status { get; set; }
+        public DateTime CreatedAt { get; set; }
+    }
+}
+
+// DTOs/MessageDto.cs
+namespace SocialMediaApp.DTOs
+{
+    public class MessageDto
+    {
+        public int Id { get; set; }
+        public string Content { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public bool IsRead { get; set; }
+        public UserDto Sender { get; set; }
+        public UserDto Receiver { get; set; }
+    }
+
+    public class CreateMessageDto
+    {
+        public string ReceiverId { get; set; }
+        public string Content { get; set; }
+    }
+}
+
+// DTOs/NotificationDto.cs
+namespace SocialMediaApp.DTOs
+{
+    public class NotificationDto
+    {
+        public int Id { get; set; }
+        public string Type { get; set; }
+        public string Content { get; set; }
+        public bool IsRead { get; set; }
+        public DateTime CreatedAt { get; set; }
+    }
+}
+
+// DTOs/MediaDto.cs
+namespace SocialMediaApp.DTOs
+{
+    public class MediaDto
+    {
+        public int Id { get; set; }
+        public string Url { get; set; }
+        public string Type { get; set; }
+        public DateTime UploadedAt { get; set; }
+    }
+}
