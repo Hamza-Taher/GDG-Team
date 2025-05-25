@@ -1,0 +1,27 @@
+// Models/Comment.cs
+using System.ComponentModel.DataAnnotations;
+
+namespace SocialMediaApp.Models
+{
+    public class Comment
+    {
+        public int Id { get; set; }
+
+        [Required]
+        public int PostId { get; set; }
+
+        [Required]
+        public string UserId { get; set; }
+
+        [Required]
+        [MaxLength(1000)]
+        public string Content { get; set; }
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        // Navigation properties
+        public Post Post { get; set; }
+        public User User { get; set; }
+        public ICollection<Reply> Replies { get; set; }
+    }
+}
