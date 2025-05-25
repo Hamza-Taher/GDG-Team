@@ -1,0 +1,28 @@
+// Helpers/AutoMapperProfiles.cs
+using AutoMapper;
+using SocialMediaApp.DTOs;
+using SocialMediaApp.Models;
+
+namespace SocialMediaApp.Helpers
+{
+    public class AutoMapperProfiles : Profile
+    {
+        public AutoMapperProfiles()
+        {
+            CreateMap<User, UserDto>();
+            CreateMap<Post, PostDto>()
+                .ForMember(dest => dest.LikeCount, opt => opt.MapFrom(src => src.Likes.Count))
+                .ForMember(dest => dest.CommentCount, opt => opt.MapFrom(src => src.Comments.Count));
+            CreateMap<Comment, CommentDto>()
+                .ForMember(dest => dest.ReplyCount, opt => opt.MapFrom(src => src.Replies.Count));
+            CreateMap<Reply, ReplyDto>();
+            CreateMap<Friendship, FriendshipDto>()
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
+            CreateMap<Message, MessageDto>();
+            CreateMap<Notification, NotificationDto>()
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToString()));
+            CreateMap<Media, MediaDto>()
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type.ToString()));
+        }
+    }
+}
