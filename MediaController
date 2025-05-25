@@ -1,0 +1,85 @@
+// Controllers/MediaController.cs
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SocialMediaApp.Data;
+using SocialMediaApp.DTOs;
+using SocialMediaApp.Models;
+
+namespace SocialMediaApp.Controllers
+{
+    [Authorize]
+    [Route("api/media")]
+    [ApiController]
+    public class MediaController : ControllerBase
+    {
+        private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _env;
+
+        public MediaController(ApplicationDbContext context, IMapper mapper, IWebHostEnvironment env)
+        {
+            _context = context;
+            _mapper = mapper;
+            _env = env;
+        }
+
+        [HttpPost("upload")]
+        public async Task<ActionResult<MediaDto>> UploadMedia(IFormFile file)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _context.Users.FindAsync(userId);
+
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("No file uploaded");
+            }
+
+            var uploadsFolder = Path.Combine(_env.WebRootPath, "uploads");
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
+
+            var uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(fileStream);
+            }
+
+            var mediaType = file.ContentType.StartsWith("image/") ? MediaType.Image : MediaType.Video;
+
+            var media = new Media
+            {
+                UserId = userId,
+                Url = $"/uploads/{uniqueFileName}",
+                Type = mediaType,
+                UploadedAt = DateTime.UtcNow
+            };
+
+            _context.Media.Add(media);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<MediaDto>(media);
+        }
+
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<IEnumerable<MediaDto>>> GetUserMedia(string userId)
+        {
+            var media = await _context.Media
+                .Where(m => m.UserId == userId)
+                .OrderByDescending(m => m.UploadedAt)
+                .ToListAsync();
+
+            return _mapper.Map<List<MediaDto>>(media);
+        }
+    }
+}
