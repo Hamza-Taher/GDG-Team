@@ -1,0 +1,93 @@
+// Controllers/LikesController.cs
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SocialMediaApp.Data;
+using SocialMediaApp.DTOs;
+using SocialMediaApp.Models;
+
+namespace SocialMediaApp.Controllers
+{
+    [Authorize]
+    [Route("api/likes")]
+    [ApiController]
+    public class LikesController : ControllerBase
+    {
+        private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
+
+        public LikesController(ApplicationDbContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
+
+        [HttpPost("post/{postId}")]
+        public async Task<ActionResult> LikePost(int postId)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _context.Users.FindAsync(userId);
+            var post = await _context.Posts.FindAsync(postId);
+
+            if (user == null || post == null)
+            {
+                return BadRequest("Invalid user or post");
+            }
+
+            var existingLike = await _context.Likes
+                .FirstOrDefaultAsync(l => l.PostId == postId && l.UserId == userId);
+
+            if (existingLike != null)
+            {
+                return BadRequest("You already liked this post");
+            }
+
+            var like = new Like
+            {
+                PostId = postId,
+                UserId = userId,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _context.Likes.Add(like);
+
+            // Create notification if the post owner is not the liker
+            if (post.UserId != userId)
+            {
+                var notification = new Notification
+                {
+                    UserId = post.UserId,
+                    Type = NotificationType.Like,
+                    Content = $"{user.Name} liked your post",
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                _context.Notifications.Add(notification);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpDelete("post/{postId}")]
+        public async Task<IActionResult> UnlikePost(int postId)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            var like = await _context.Likes
+                .FirstOrDefaultAsync(l => l.PostId == postId && l.UserId == userId);
+
+            if (like == null)
+            {
+                return NotFound();
+            }
+
+            _context.Likes.Remove(like);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+    }
+}
