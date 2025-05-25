@@ -1,0 +1,20 @@
+// Models/Like.cs
+namespace SocialMediaApp.Models
+{
+    public class Like
+    {
+        public int Id { get; set; }
+
+        [Required]
+        public int PostId { get; set; }
+
+        [Required]
+        public string UserId { get; set; }
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        // Navigation properties
+        public Post Post { get; set; }
+        public User User { get; set; }
+    }
+}
