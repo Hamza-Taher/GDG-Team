@@ -1,0 +1,104 @@
+// Controllers/RepliesController.cs
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SocialMediaApp.Data;
+using SocialMediaApp.DTOs;
+using SocialMediaApp.Models;
+
+namespace SocialMediaApp.Controllers
+{
+    [Authorize]
+    [Route("api/replies")]
+    [ApiController]
+    public class RepliesController : ControllerBase
+    {
+        private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
+
+        public RepliesController(ApplicationDbContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<ReplyDto>> CreateReply(CreateReplyDto createReplyDto)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _context.Users.FindAsync(userId);
+            var comment = await _context.Comments
+                .Include(c => c.User)
+                .FirstOrDefaultAsync(c => c.Id == createReplyDto.CommentId);
+
+            if (user == null || comment == null)
+            {
+                return BadRequest("Invalid user or comment");
+            }
+
+            var reply = new Reply
+            {
+                CommentId = createReplyDto.CommentId,
+                UserId = userId,
+                Content = createReplyDto.Content,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _context.Replies.Add(reply);
+            await _context.SaveChangesAsync();
+
+            // Create notification
+            if (comment.UserId != userId)
+            {
+                var notification = new Notification
+                {
+                    UserId = comment.UserId,
+                    Type = NotificationType.Comment,
+                    Content = $"{user.Name} replied to your comment",
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                _context.Notifications.Add(notification);
+                await _context.SaveChangesAsync();
+            }
+
+            return _mapper.Map<ReplyDto>(reply);
+        }
+
+        [HttpGet("comment/{commentId}")]
+        public async Task<ActionResult<IEnumerable<ReplyDto>>> GetRepliesForComment(int commentId)
+        {
+            var replies = await _context.Replies
+                .Include(r => r.User)
+                .Where(r => r.CommentId == commentId)
+                .OrderByDescending(r => r.CreatedAt)
+                .ToListAsync();
+
+            return _mapper.Map<List<ReplyDto>>(replies);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteReply(int id)
+        {
+            var reply = await _context.Replies.FindAsync(id);
+
+            if (reply == null)
+            {
+                return NotFound();
+            }
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (reply.UserId != userId)
+            {
+                return Unauthorized();
+            }
+
+            _context.Replies.Remove(reply);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+    }
+}
