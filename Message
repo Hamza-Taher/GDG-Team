@@ -1,0 +1,28 @@
+// Models/Message.cs
+using System.ComponentModel.DataAnnotations;
+
+namespace SocialMediaApp.Models
+{
+    public class Message
+    {
+        public int Id { get; set; }
+
+        [Required]
+        public string SenderId { get; set; }
+
+        [Required]
+        public string ReceiverId { get; set; }
+
+        [Required]
+        [MaxLength(2000)]
+        public string Content { get; set; }
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public bool IsRead { get; set; } = false;
+
+        // Navigation properties
+        public User Sender { get; set; }
+        public User Receiver { get; set; }
+    }
+}
