@@ -1,0 +1,103 @@
+// Controllers/CommentsController.cs
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SocialMediaApp.Data;
+using SocialMediaApp.DTOs;
+using SocialMediaApp.Models;
+
+namespace SocialMediaApp.Controllers
+{
+    [Authorize]
+    [Route("api/comments")]
+    [ApiController]
+    public class CommentsController : ControllerBase
+    {
+        private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
+
+        public CommentsController(ApplicationDbContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<CommentDto>> CreateComment(CreateCommentDto createCommentDto)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _context.Users.FindAsync(userId);
+            var post = await _context.Posts.FindAsync(createCommentDto.PostId);
+
+            if (user == null || post == null)
+            {
+                return BadRequest("Invalid user or post");
+            }
+
+            var comment = new Comment
+            {
+                PostId = createCommentDto.PostId,
+                UserId = userId,
+                Content = createCommentDto.Content,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _context.Comments.Add(comment);
+            await _context.SaveChangesAsync();
+
+            // Create notification
+            if (post.UserId != userId)
+            {
+                var notification = new Notification
+                {
+                    UserId = post.UserId,
+                    Type = NotificationType.Comment,
+                    Content = $"{user.Name} commented on your post",
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                _context.Notifications.Add(notification);
+                await _context.SaveChangesAsync();
+            }
+
+            return _mapper.Map<CommentDto>(comment);
+        }
+
+        [HttpGet("post/{postId}")]
+        public async Task<ActionResult<IEnumerable<CommentDto>>> GetCommentsForPost(int postId)
+        {
+            var comments = await _context.Comments
+                .Include(c => c.User)
+                .Include(c => c.Replies)
+                .Where(c => c.PostId == postId)
+                .OrderByDescending(c => c.CreatedAt)
+                .ToListAsync();
+
+            return _mapper.Map<List<CommentDto>>(comments);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteComment(int id)
+        {
+            var comment = await _context.Comments.FindAsync(id);
+
+            if (comment == null)
+            {
+                return NotFound();
+            }
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (comment.UserId != userId)
+            {
+                return Unauthorized();
+            }
+
+            _context.Comments.Remove(comment);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+    }
+}
