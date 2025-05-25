@@ -1,0 +1,124 @@
+// Controllers/PostsController.cs
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SocialMediaApp.Data;
+using SocialMediaApp.DTOs;
+using SocialMediaApp.Models;
+
+namespace SocialMediaApp.Controllers
+{
+    [Authorize]
+    [Route("api/posts")]
+    [ApiController]
+    public class PostsController : ControllerBase
+    {
+        private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _env;
+
+        public PostsController(ApplicationDbContext context, IMapper mapper, IWebHostEnvironment env)
+        {
+            _context = context;
+            _mapper = mapper;
+            _env = env;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<PostDto>>> GetPosts()
+        {
+            var posts = await _context.Posts
+                .Include(p => p.User)
+                .Include(p => p.Likes)
+                .Include(p => p.Comments)
+                .OrderByDescending(p => p.CreatedAt)
+                .ToListAsync();
+
+            return _mapper.Map<List<PostDto>>(posts);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<PostDto>> GetPost(int id)
+        {
+            var post = await _context.Posts
+                .Include(p => p.User)
+                .Include(p => p.Likes)
+                .Include(p => p.Comments)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            return _mapper.Map<PostDto>(post);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<PostDto>> CreatePost([FromForm] CreatePostDto createPostDto)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await _context.Users.FindAsync(userId);
+
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            var post = new Post
+            {
+                UserId = userId,
+                Content = createPostDto.Content,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            if (createPostDto.Image != null)
+            {
+                var uploadsFolder = Path.Combine(_env.WebRootPath, "uploads");
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+                var uniqueFileName = Guid.NewGuid().ToString() + "_" + createPostDto.Image.FileName;
+                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await createPostDto.Image.CopyToAsync(fileStream);
+                }
+
+                post.ImageUrl = $"/uploads/{uniqueFileName}";
+            }
+
+            _context.Posts.Add(post);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetPost), new { id = post.Id }, _mapper.Map<PostDto>(post));
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePost(int id)
+        {
+            var post = await _context.Posts.FindAsync(id);
+
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (post.UserId != userId)
+            {
+                return Unauthorized();
+            }
+
+            _context.Posts.Remove(post);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+    }
+}
