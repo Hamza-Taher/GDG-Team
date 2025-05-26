@@ -1,0 +1,17 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SocialMediaApp
+{
+    public class Connection
+    {
+        public const string connectionString =
+     "Server=DESKTOP-TQ4M1UM;" +//Write you server name
+     "Database=dbefTest;" +//write Yor database name
+     "Integrated Security=True;" +
+     "TrustServerCertificate=True;";
+    }
+}
