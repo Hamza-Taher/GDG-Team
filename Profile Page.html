@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Profile Page Style.css">
+    <title>Profile Page - LinkedIn</title>
+    <link rel="icon" href="images/logo.png" type="image/png"> <!-- Insert the icon beside the title tag "tabs" -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />  <!--font awesome icons cdn-->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'> <!--Boxicon icons cdn-->
+</head>
+<body>
+    
+    <!-- Navigation Bar -->
+    <nav class = "navbar">
+        <div class="navbar-left">
+            <a href="Main Page.html" class="logo"><img src="images/logo.png" alt="LinkedIn logo"></a>
+
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Search">
+            </div>
+
+        </div>
+        <div class="navbar-center">
+            <ul>
+                <li><a href="#" class="active-link"><img src="images/home.png"> <span>Home</span></a></li>
+                <li><a href="#"><img src="images/network.png"> <span>My Network</span></a></li>
+                <li><a href="#"><img src="images/jobs.png"> <span>Jobs</span></a></li>
+                <li><a href="#"><img src="images/message.png"> <span>Messaging</span></a></li>
+                <li><a href="#"><img src="images/notification.png"> <span>Notifications</span></a></li>
+            </ul>
+        </div>
+
+        <div class="navbar-right">
+            <div class="online">
+                <img src="images/user_profile_image.jpg" class="nav-profile-img" id="profile-image-1"> <!--1-->
+            </div>
+        </div>
+
+        <!-- / ------------------------ Profile Drop Down Menu ------------------------ / -->
+        <div class="profile-menu-wrap" id="profile-menu-wrap">
+            <div class="profile-menu">
+                <div class="user-info">
+                    <img src="images/user_profile_image.jpg" id="profile-image-5">
+                    <div>
+                        <h2 id="menuUserName"></h2>
+                    </div>
+                </div>
+                <hr>
+
+                <a href="#" class="profile-menu-link">
+                    <img src="images/feedback.png">
+                    <p>Give Feedback</p>
+                    <span><i class="fa-solid fa-chevron-right"></i></span>
+                </a>
+
+                <a href="#" class="profile-menu-link">
+                    <img src="images/setting.png">
+                    <p>Settings & Privacy</p>
+                    <span><i class="fa-solid fa-chevron-right"></i></span>
+                </a>
+
+                <a href="#" class="profile-menu-link">
+                    <img src="images/help.png">
+                    <p>Help & Support</p>
+                    <span><i class="fa-solid fa-chevron-right"></i></span>
+                </a>
+
+                <a href="#" class="profile-menu-link">
+                    <img src="images/display.png">
+                    <p>Display & Accessibility</p>
+                    <span><i class="fa-solid fa-chevron-right"></i></span>
+                </a>
+
+                <a href="#" class="profile-menu-link log-out">
+                    <img src="images/logout.png">
+                    <p>Log Out</p>
+                    <span><i class="fa-solid fa-chevron-right"></i></span>
+                </a>
+
+            </div>
+        </div>
+
+    </nav>
+    <!-- / ------------------------ Navigation Bar End ------------------------ / -->
+
+    <div class="container">
+
+        <!-- Profile Main -->
+        <div class="profile_main">
+                <div class="profile-container">
+                    <div class="cover-image-container">
+                        <img src="images/empty_cover_image.jpg" alt="Cover Image" class="cover-image" id="cover-image"> 
+                        <label for="cover-upload" class="upload-btn" title="Change cover image">
+                            <i class="fa-solid fa-camera"></i>
+                        </label>
+                        <input type="file" id="cover-upload" accept="image/*">
+                    </div>
+                    
+                    <div class="profile-container-inner">
+                        <div class="profile-image-container">
+                            <img src="images/user_profile_image.jpg" alt="Profile Picture" class="profile-image profile-pic" id="main-profile-image"> <!--2-->
+                            <label for="profile-upload" class="upload-btn profile-upload-btn" title="Change profile picture">
+                                <i class="fa-solid fa-camera"></i>
+                            </label>
+                            <input type="file" id="profile-upload" accept="image/*">
+                        </div>
+                        <h1 id="userName"></h1>
+                        <h3 id="desc"></h3>
+                        <p id="location"><a href="#">Contact Info</a></p>
+                        
+                        <div class="edit-icon-profile">
+                            <i class="fa-solid fa-pen"></i>
+                        </div>
+
+                        <div class="modal-overlay" id="profileEditModalOverlay">
+                            <div class="modal">
+                                <div class="modal-header">
+                                    <h3>Edit Profile</h3>
+                                    <button class="close-btn" id="closeProfileEditBtn">
+                                        <i class='bx bx-x'></i>
+                                    </button>
+                                </div>
+                                <div class="form-group">
+                                    <label>First Name</label>
+                                    <input type="text" id="firstNameInput" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label>Last Name</label>
+                                    <input type="text" id="lastNameInput" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    <input type="text" id="descInput" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label>City/Government</label>
+                                    <input type="text" id="cityInput" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label>Country</label>
+                                    <input type="text" id="countryInput" class="form-input">
+                                </div>
+                                <button class="add-skill-btn" id="saveProfileBtn">Save</button>
+                            </div>
+                    </div>
+                    </div>
+                </div>
+
+<!--=======================================================================================================================================================================================-->
+
+<!--  Education Section  -->
+<div class="education-container">
+    <div class="section-header">
+        <h2 class="section-title">Education</h2>
+        <button class="add-btn" id="addEducationBtn">
+            <i class="fa-regular fa-plus"></i>
+        </button>
+    </div>
+
+    <div class="education-list" id="educationList"></div>
+
+    <div id="showMoreEducationContainer">
+        <button class="show-more-btn" id="showMoreEducationBtn">
+            <i class="fa-solid fa-chevron-down"></i>
+            <span>Show more</span>
+        </button>
+    </div>
+</div>
+
+<!-- Education Modal -->
+<div class="modal-overlay" id="educationModalOverlay">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title">Add Education</h3>
+            <button class="close-btn" id="closeEducationBtn">
+                <i class='bx bx-x'></i>
+            </button>
+        </div>
+        <div class="form-group">
+            <label class="required-form-label">School / University Name</label>
+            <input type="text" id="schoolNameInput" class="form-input" placeholder="Ex: Harvard University">
+        </div>
+        <div class="form-group">
+            <label class="required-form-label">Degree</label>
+            <select id="degreeSelect" class="form-input">
+                <option value="">-- Select Degree --</option>
+                <option>Bachelor</option>
+                <option>Master</option>
+                <option>PhD</option>
+                <option>License</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="required-form-label">Field of Study</label>
+            <input type="text" id="fieldInput" class="form-input" placeholder="Ex: Computer Science">
+        </div>
+        <div class="form-group">
+            <label class="required-form-label">Start Date</label>
+            <input type="date" id="eduStartDateInput" class="form-input">
+        </div>
+        <div class="form-group">
+            <label class="form-label">End Date (Leave empty if current)</label>
+            <input type="date" id="eduEndDateInput" class="form-input">
+        </div>
+        <div class="form-group">
+            <label class="form-label">Institution Logo (Optional)</label>
+                <div class="image-upload-container">
+                    <label for="eduLogoUpload" class="upload-label">
+                        <i class="fa-solid fa-image"></i>
+                        <span>Choose Logo</span>
+                    </label>
+                    <input type="file" id="eduLogoUpload" class="form-input" accept="image/*">
+                     <div class="image-preview" id="eduLogoPreview"></div>
+                </div>
+</div>
+
+        <button class="add-skill-btn" id="submitEducationBtn" disabled>Add</button>
+    </div>
+</div>
+
+
+<!--=======================================================================================================================================================================================-->
+                 <!-- Skills Section -->
+         <div class="skills-container">
+            <div class="header">
+                <h2 class="title">Skills</h2>
+                <button class="add-btn" id="addBtn">
+                    <i class="fa-regular fa-plus"></i>
+                </button>
+            </div>
+    
+            <div class="child" id="skillsList"></div>
+    
+            <div id="showMoreContainer" style="display: none;">
+                <button class="show-more-btn" id="showMoreBtn">
+                    <i class="fa-solid fa-chevron-down"></i>
+                    <span>Show more</span>
+                </button>
+            </div>
+        </div>
+    
+        <div class="modal-overlay" id="modalOverlay">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3 class="modal-title">Add skill</h3>
+                    <button class="close-btn" id="closeBtn">
+                        <i class='bx bx-x'></i>
+                    </button>
+                </div>
+                <div class="form-group">
+                    <label for="skillInput" class="form-label">Skill</label>
+                    <input type="text" id="skillInput" class="form-input" placeholder="Ex: JavaScript">
+                </div>
+                <button class="add-skill-btn" id="submitBtn" disabled>Add</button>
+            </div>
+        </div>
+
+<!--=======================================================================================================================================================================================-->
+        <!-- About Section -->
+        <div class="about-container">
+            <div class="section-header">
+                <h2 class="section-title">About</h2>
+                <button class="edit-btn-about" id="editButton" aria-label="Edit about section">
+                    <i class='bx bxs-edit-alt'></i>
+                </button>
+            </div>
+            
+            <!-- View mode -->
+            <div id="viewMode">
+                <div id="emptyState" class="empty-state">Add a summary about yourself...</div>
+                <p class="about-content hidden" id="aboutText"></p>
+                <button class="show-more-btn hidden" id="showMoreButton">...see more</button>
+            </div>
+            
+            <!-- Edit mode (initially hidden) -->
+            <div id="editMode" class="hidden">
+                <textarea class="about-textarea" id="aboutTextarea" placeholder="Write a summary about yourself..."></textarea>
+                <div class="button-group">
+                    <button class="cancel-btn" id="cancelButton">Cancel</button>
+                    <button class="save-btn" id="saveButton">Save</button>
+                </div>
+                <button class="clear-btn hidden" id="clearButton">Clear saved information</button>
+            </div>
+        </div>
+
+<!--=======================================================================================================================================================================================-->
+        <!-- Language Section -->
+<div class="language-container">
+    <div class="section-header">
+        <h2 class="section-title">Languages</h2>
+        <button class="add-btn" id="addLangBtn">
+            <i class="fa-regular fa-plus"></i>
+        </button>
+    </div>
+
+    <div class="language-list" id="languageList"></div>
+
+    <div id="showMoreLangContainer" style="display: none;">
+        <button class="show-more-btn" id="showMoreLangBtn">
+            <i class="fa-solid fa-chevron-down"></i>
+            <span>Show more</span>
+        </button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="langModalOverlay">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title">Add language</h3>
+            <button class="close-btn-language" id="closeLangBtn">
+                <i class='bx bx-x'></i>
+            </button>
+        </div>
+        <div class="form-group">
+            <label for="languageInput" class="form-label">Language</label>
+            <input type="text" id="languageInput" class="form-input" placeholder="Ex: English">
+        </div>
+        <div class="form-group">
+            <label for="proficiencySelect" class="form-label">Proficiency</label>
+            <select id="proficiencySelect" class="form-input">
+                <option value="Native or bilingual">Native or bilingual</option>
+                <option value="Full professional">Full professional</option>
+                <option value="Professional working">Professional working</option>
+                <option value="Limited working">Limited working</option>
+                <option value="Elementary">Elementary</option>
+            </select>
+        </div>
+        <button class="add-skill-btn" id="submitLangBtn" disabled>Add</button>
+    </div>
+</div>
+<!--=======================================================================================================================================================================================-->
+<!-- Experience Section -->
+<div class="experience-container">
+    <div class="section-header">
+        <h2 class="section-title">Experience</h2>
+        <button class="add-btn" id="addExperienceBtn">
+            <i class="fa-regular fa-plus"></i>
+        </button>
+    </div>
+
+    <div class="experience-list" id="experienceList"></div>
+
+    <div id="showMoreExperienceContainer" style="display: none;">
+        <button class="show-more-btn" id="showMoreExperienceBtn">
+            <i class="fa-solid fa-chevron-down"></i>
+            <span>Show more</span>
+        </button>
+    </div>
+</div>
+
+<!-- Experience Modal -->
+<div class="modal-overlay" id="experienceModalOverlay">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title">Add Experience</h3>
+            <button class="close-btn" id="closeExperienceBtn">
+                <i class='bx bx-x'></i>
+            </button>
+        </div>
+        <div class="form-group">
+            <label for="jobTitleInput" class="required-form-label">Job Title</label>
+            <input type="text" id="jobTitleInput" class="form-input" placeholder="Ex: Software Engineer">
+        </div>
+        <div class="form-group">
+            <label for="companyNameInput" class="required-form-label">Company/Organization</label>
+            <input type="text" id="companyNameInput" class="form-input" placeholder="Ex: Microsoft">
+        </div>
+        <div class="form-group">
+            <label for="startDateInput" class="required-form-label">Start Date</label>
+            <input type="date" id="startDateInput" class="form-input">
+        </div>
+        <div class="form-group">
+            <label for="endDateInput" class="form-label">End Date (Leave empty if current)</label>
+            <input type="date" id="endDateInput" class="form-input">
+        </div>
+        <div class="form-group">
+            <label for="companyLogoUpload" class="form-label">Company Logo (Optional)</label>
+            <div class="image-upload-container">
+                <label for="companyLogoUpload" class="upload-label">
+                    <i class="fa-solid fa-image"></i>
+                    <span>Choose Logo</span>
+                </label>
+                <input type="file" id="companyLogoUpload" class="form-input" accept="image/*">
+                <div class="image-preview" id="companyLogoPreview"></div>
+            </div>
+        </div>
+        <button class="add-skill-btn" id="submitExperienceBtn" disabled>Add</button>
+    </div>
+</div>
+
+<!--=======================================================================================================================================================================================-->
+        <!-- Projects Section -->
+<div class="project-container">
+    <div class="section-header">
+        <h2 class="section-title">Projects</h2>
+        <button class="add-btn" id="addProjectBtn">
+            <i class="fa-regular fa-plus"></i>
+        </button>
+    </div>
+
+    <div class="project-list" id="projectList"></div>
+
+    <div id="showMoreProjectContainer" style="display: none;">
+        <button class="show-more-btn" id="showMoreProjectBtn">
+            <i class="fa-solid fa-chevron-down"></i>
+            <span>Show more</span>
+        </button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="projectModalOverlay">
+    <div class="modal project-modal">
+        <div class="modal-header">
+            <h3 class="modal-title">Add project</h3>
+            <button class="close-btn" id="closeProjectBtn">
+                <i class='bx bx-x'></i>
+            </button>
+        </div>
+        <div class="form-group">
+            <label for="projectTitleInput" class="required-form-label">Project title</label>
+            <input type="text" id="projectTitleInput" class="form-input" placeholder="Ex: Personal Portfolio Website">
+        </div>
+        <div class="form-group">
+            <label for="projectDateInput" class="required-form-label">Completion date</label>
+            <input type="date" id="projectDateInput" class="form-input">
+        </div>
+        <div class="form-group">
+            <label for="projectDescInput" class="required-form-label"">Description</label>
+            <textarea id="projectDescInput" class="form-textarea" placeholder="Describe your project (max 500 characters)" maxlength="500"></textarea>
+            <div class="char-counter"><span id="charCount">0</span>/500</div>
+        </div>
+        <div class="form-group">
+            <label for="projectLinkInput" class="form-label">GitHub link</label>
+            <input type="url" id="projectLinkInput" class="form-input" placeholder="https://github.com/username/project">
+        </div>
+        <button class="add-project-btn" id="submitProjectBtn" disabled>Add</button>
+    </div>
+</div>
+
+<!--=======================================================================================================================================================================================-->
+<!-- Licenses & Certifications Section -->
+
+<div class="certifications-container">
+    <div class="section-header">
+        <h2 class="section-title">Licenses & Certifications</h2>
+        <button class="add-btn" id="addCertBtn">
+            <i class="fa-regular fa-plus"></i>
+        </button>
+    </div>
+
+    <div class="certifications-list" id="certificationsList"></div>
+
+    <div id="showMoreCertContainer" style="display: none;">
+        <button class="show-more-btn" id="showMoreCertBtn">
+            <i class="fa-solid fa-chevron-down"></i>
+            <span>Show more</span>
+        </button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="certModalOverlay">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title">Add License/Certification</h3>
+            <button class="close-btn" id="closeCertBtn">
+                <i class='bx bx-x'></i>
+            </button>
+        </div>
+        <div class="form-group">
+            <label for="certTitleInput" class="required-form-label">Title</label>
+            <input type="text" id="certTitleInput" class="form-input" placeholder="Ex: AWS Certified Solutions Architect">
+        </div>
+        <div class="form-group">
+            <label for="certImageUpload" class="form-label">Certificate Image/Badge</label>
+            <div class="image-upload-container">
+                <label for="certImageUpload" class="upload-label">
+                    <i class="fa-solid fa-image"></i>
+                    <span>Choose Image</span>
+                </label>
+                <input type="file" id="certImageUpload" class="form-input" accept="image/*">
+                <div class="image-preview" id="certImagePreview"></div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="certDateInput" class="required-form-label">Date Earned</label>
+            <input type="date" id="certDateInput" class="form-input">
+        </div>
+        <div class="form-group">
+            <label for="certDocInput" class="form-label">Documentation (max 500 chars)</label>
+            <textarea id="certDocInput" class="form-textarea" placeholder="Description or details about the certification" maxlength="500"></textarea>
+            <div class="char-counter"><span id="certCharCount">0</span>/500</div>
+        </div>
+        <button class="add-skill-btn" id="submitCertBtn" disabled>Add</button>
+    </div>
+</div>
+
+<!--=======================================================================================================================================================================================-->
+         <!-- Events section -->
+<div class="events-container">
+    <div class="section-header">
+        <h2 class="section-title">Events</h2>
+        <button class="add-btn" id="addEventBtn">
+            <i class="fa-regular fa-plus"></i>
+        </button>
+    </div>
+
+    <div class="events-list" id="eventsList"><!-- Here where events are added autimatically --></div>
+
+    <div id="showMoreEventsContainer" style="display: none;">
+        <button class="show-more-btn" id="showMoreEventsBtn">
+            <i class="fa-solid fa-chevron-down"></i>
+            <span>Show more</span>
+        </button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="eventModalOverlay">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title">Add Event</h3>
+            <button class="close-btn" id="closeEventBtn">
+                <i class='bx bx-x'></i>
+            </button>
+        </div>
+        <div class="form-group">
+            <label for="eventTitleInput" class="required-form-label">Event Title</label>
+            <input type="text" id="eventTitleInput" class="form-input" placeholder="Ex: Tech Conference">
+        </div>
+        <div class="form-group">
+            <label for="eventImageUpload" class="form-label">Event Logo/Image</label>
+            <div class="image-upload-container">
+                <label for="eventImageUpload" class="upload-label">
+                    <i class="fa-solid fa-image"></i>
+                    <span>Choose Image</span>
+                </label>
+                <input type="file" id="eventImageUpload" class="form-input" accept="image/*">
+                <div class="image-preview" id="eventImagePreview"></div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="eventStartDate" class="required-form-label">Start Date</label>
+            <input type="date" id="eventStartDate" class="form-input">
+        </div>
+        <div class="form-group">
+            <label for="eventEndDate" class="form-label">End Date (optional)</label>
+            <input type="date" id="eventEndDate" class="form-input">
+        </div>
+        <button class="add-skill-btn" id="submitEventBtn" disabled>Add</button>
+    </div>
+</div>
+
+        </div>
+
+        <!-- Profile Sidebar -->
+        <div class="profile_sidebar">
+
+        </div>
+    </div>
+    
+    <footer class="main-footer">
+  <div class="footer-container">
+  
+    <div class="footer-columns">
+      <!-- Navigation Column -->
+      <div class="footer-column">
+        <h3 class="footer-title">Navigation</h3>
+        <ul class="footer-links">
+          <li><a href="#">Home</a></li>
+          <li><a href="#">My Network</a></li>
+          <li><a href="#">Jobs</a></li>
+          <li><a href="#">Messaging</a></li>
+          <li><a href="#">Notifications</a></li>
+        </ul>
+      </div>
+      
+      <!-- Quick Actions Column -->
+      <div class="footer-column">
+        <h3 class="footer-title">Quick Actions</h3>
+        <ul class="footer-links">
+          <li><a href="#">Post a Job</a></li>
+          <li><a href="#">Advertise</a></li>
+          <li><a href="#">Find Companies</a></li>
+          <li><a href="#">Groups</a></li>
+          <li><a href="#">Services</a></li>
+        </ul>
+      </div>
+      
+      <!-- Business Solutions Column -->
+      <div class="footer-column">
+        <h3 class="footer-title">Business Solutions</h3>
+        <ul class="footer-links">
+          <li><a href="#">Talent Solutions</a></li>
+          <li><a href="#">Marketing Solutions</a></li>
+          <li><a href="#">Sales Solutions</a></li>
+          <li><a href="#">Learning Solutions</a></li>
+        </ul>
+      </div>
+      
+      <!-- Directory Column -->
+      <div class="footer-column">
+        <h3 class="footer-title">Directory</h3>
+        <ul class="footer-links">
+          <li><a href="#">Members</a></li>
+          <li><a href="#">Jobs</a></li>
+          <li><a href="#">Companies</a></li>
+          <li><a href="#">Salaries</a></li>
+          <li><a href="#">Featured</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <div class="footer-copyright">
+        © 2023 LinkedIn Corporation. All rights reserved.
+      </div>
+      <div class="footer-legal">
+        <a href="#">User Agreement</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Cookie Policy</a>
+        <a href="#">Copyright Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+    <script src="Main Page script.js"></script>
+    <script src="Profile Page script.js"></script>
+
+</body>
+</html>

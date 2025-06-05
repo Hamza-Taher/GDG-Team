@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Main Page style.css">
+    <title>LinkedIn</title>
+    <link rel="icon" href="images/logo.png" type="image/png"> <!-- Insert the icon beside the title tag "tabs" -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />  <!--font awesome icons cdn-->
+</head>
+<body>
+    
+    <!-- Navigation Bar -->
+    <nav class = "navbar">
+        <div class="navbar-left">
+            <a href="Main Page.html" class="logo"><img src="images/logo.png" alt="LinkedIn logo"></a>
+
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Search">
+            </div>
+
+        </div>
+        <div class="navbar-center">
+            <ul>
+                <li><a href="#" class="active-link"><img src="images/home.png"> <span>Home</span></a></li>
+                <li><a href="#"><img src="images/network.png"> <span>My Network</span></a></li>
+                <li><a href="#"><img src="images/jobs.png"> <span>Jobs</span></a></li>
+                <li><a href="#"><img src="images/message.png"> <span>Messaging</span></a></li>
+                <li><a href="#"><img src="images/notification.png"> <span>Notifications</span></a></li>
+            </ul>
+        </div>
+
+        <div class="navbar-right">
+            <div class="online">
+                <img src="images/user_profile_image.jpg" class="nav-profile-img" id="profile-image-1"> <!--1-->
+            </div>
+        </div>
+
+        <!-- / ------------------------ Profile Drop Down Menu ------------------------ / -->
+        <div class="profile-menu-wrap" id="profile-menu-wrap">
+            <div class="profile-menu">
+                <div class="user-info">
+                    <img src="images/user_profile_image.jpg" id="profile-image-5">
+                    <div>
+                        <h3 id="menuUserName"></h3>
+                        <a href="Profile Page.html">See your profile</a>
+                    </div>
+                </div>
+                <hr>
+
+                <a href="#" class="profile-menu-link">
+                    <img src="images/feedback.png">
+                    <p>Give Feedback</p>
+                    <span><i class="fa-solid fa-chevron-right"></i></span>
+                </a>
+
+                <a href="#" class="profile-menu-link">
+                    <img src="images/setting.png">
+                    <p>Settings & Privacy</p>
+                    <span><i class="fa-solid fa-chevron-right"></i></span>
+                </a>
+
+                <a href="#" class="profile-menu-link">
+                    <img src="images/help.png">
+                    <p>Help & Support</p>
+                    <span><i class="fa-solid fa-chevron-right"></i></span>
+                </a>
+
+                <a href="#" class="profile-menu-link">
+                    <img src="images/display.png">
+                    <p>Display & Accessibility</p>
+                    <span><i class="fa-solid fa-chevron-right"></i></span>
+                </a>
+
+                <a href="#" class="profile-menu-link log-out">
+                    <img src="images/logout.png">
+                    <p>Log Out</p>
+                    <span><i class="fa-solid fa-chevron-right"></i></span>
+                </a>
+
+            </div>
+        </div>
+
+    </nav>
+    <!-- / ------------------------ Navigation Bar End ------------------------ / -->
+
+    <!-- Container -->
+    <div class="container">
+        <!-- Left Sidebar -->
+        <div class="left-sidebar">
+            <div class="sidebar-profile-box">
+                <div class="cover-image-container">
+                    <img src="images/empty_cover_image.jpg" alt="Cover Image" class="cover-image" id="cover-image"> 
+                    <label for="cover-upload" class="upload-btn" title="Change cover image">
+                        <i class="fa-solid fa-camera"></i>
+                    </label>
+                    <input type="file" id="cover-upload" accept="image/*">
+                </div>
+                <div class="sidebar-profile-info">
+                    <div class="profile-image-container">
+                        <img src="images/user_profile_image.jpg" alt="Profile Picture" class="profile-image" id="main-profile-image"> <!--2-->
+                        <label for="profile-upload" class="upload-btn profile-upload-btn" title="Change profile picture">
+                            <i class="fa-solid fa-camera"></i>
+                        </label>
+                        <input type="file" id="profile-upload" accept="image/*">
+                    </div>
+                    <h1 id="userName"></h1>
+                    <h3 id="desc"></h3>
+                    <p id="location"></p>
+                    <ul>
+                        <li>Your profile views<span>0</span></li>
+                        <li>Your post views<span>0</span></li>
+                        <li>Your connections<span>0</span></li>
+                    </ul>
+                </div>
+                <div class="sidebar-profile-link">
+                    <a href="#"><img src="images/items.png"> My items</a>
+                    <a href="#"><img src="images/premium.png"> Try Premium</a>
+                </div>
+            </div>
+            <div class="sidebar-activity">
+                <h3>RECENT</h3>
+                <a href="#"><img src="images/recent.png"> Web Development</a>
+                <a href="#"><img src="images/recent.png"> User Interface</a>
+                <a href="#"><img src="images/recent.png"> Online Learning</a>
+                <a href="#"><img src="images/recent.png"> Learn Online</a>
+                <a href="#"><img src="images/recent.png"> Group Learning</a>
+                <h3>GROUPS</h3>
+                <a href="#"><img src="images/group.png"> Web Design Group</a>
+                <a href="#"><img src="images/group.png"> HTML & CSS Learners</a>
+                <a href="#"><img src="images/group.png"> PYTHON & JAVASCRIPT Group</a>
+                <a href="#"><img src="images/group.png"> Learn Coding Online</a>
+                <h3>HASHTAG</h3>
+                <a href="#"><img src="images/hashtag.png"> webdevelopment</a>
+                <a href="#"><img src="images/hashtag.png"> userinterfaces</a>
+                <a href="#"><img src="images/hashtag.png"> onlinelearning</a>
+                <div class="discover-more-link">
+                    <a href="#">Discover More</a>
+                </div>
+            </div>    
+        </div>
+
+<!--=============================================================================================================================================================================================-->
+
+        <!-- Main Content -->
+        <div class="main-content">
+
+            <div class="post-container">
+                <!-- Post Form -->
+                <div class="create-post">
+                    <div class="post-top">
+                        <img id="profile-image-3" src="images/user_profile_image.jpg" alt="User Profile" />
+                        <textarea id="post-text" placeholder="What's on your mind?" rows="3"></textarea>
+                    </div>
+
+                    <div class="post-actions">
+                        <input type="file" id="post-image" accept="image/*" hidden />
+                        <button class="upload-btn-post" onclick="document.getElementById('post-image').click()"><i class="fa-solid fa-image"></i> Upload Image</button>
+                        <button id="submit-post" class="post-btn">Post</button>
+                    </div>
+
+                    <div class="post-preview">
+                        <img id="image-preview"/>
+                    </div>
+            </div>
+
+               <!-- Posts Section -->
+                <div id="posts-feed" class="posts-feed">
+                    <!-- New posts will be injected here -->
+                </div>
+             </div>
+
+            <!-- Comment Modal -->
+            <div id="comment-modal" class="comment-modal">
+                <div class="modal-content">
+                    <span class="close-btn-comment" onclick="closeCommentModal()"><i class="fa-solid fa-xmark"></i></span>
+                    <div class="comment-user-info">
+                        <img src="" id="comment-profile-img" alt="Profile">
+                        <input type="text" id="comment-input" placeholder="Write your comment..." />
+                    </div>
+                    <button onclick="submitComment()">Comment</button>
+                </div>
+            </div>
+
+        </div>
+
+<!--=============================================================================================================================================================================================-->
+
+        <!-- Right Sidebar -->
+        <div class="right-sidebar">
+            <div class="sidebar-news">
+                <img src="images/more.png" class="info-icon">
+                <h3>Trending News</h3>
+                <a href="#">High demand for skilled manpower</a>
+                <span>1d ago &middot; 10,934 readers</span>
+
+                <a href="#">Careers growing horizontally</a>
+                <span>8h ago &middot; 2,776 readers</span>
+
+                <a href="#">Less work visa for US, more for UK</a>
+                <span>3d ago &middot; 21,578 readers</span>
+
+                <a href="#">More Hiring equals Higher Performance</a>
+                <span>18h ago &middot; 9,755 readers</span>
+
+                <a href="#">Gautam Adani is the world's third richest</a>
+                <span>12h ago &middot; 4,104 readers</span>
+
+                <a href="#" class="read-more-link">Read More</a>
+            </div>
+
+            <div class="sidebar-ad">
+                <span>Ad &middot; &middot; &middot;</span>
+                <p>Master the 5 principles of web design</p>
+                <div>
+                    <img src="images/user_profile_image.jpg" id="profile-image-4"> <!--4-->
+                    <img src="images/mi-logo.png">
+                </div>
+                <div class="bold">Brand and Demand in Xiaomi</div>
+                <a href="#" class="ad-link">Learn More</a>
+            </div>
+            <div class="sidebar-useful-links">
+                <a href="#">About</a>
+                <a href="#">Accessibility</a>
+                <a href="#">Help Center</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Advertising</a>
+                <a href="#">Get the App</a>
+                <a href="#">More</a>
+
+                <div class="copy-right-msg">
+                    <img src="images/logo.png">
+                    <p>Linkedup &#169; 2025. All right reserved</p>
+                </div>
+            </div>
+        </div>
+       <!-- / ------------------------ Container End ------------------------ / -->  
+    </div>
+
+    <script src="Main Page script.js"></script>
+
+</body>
+</html>
