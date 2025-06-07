@@ -100,6 +100,34 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 //==================================================================================================================================================================================
+
+// Search input at smaller screens
+document.addEventListener('DOMContentLoaded', function () {
+  const searchIcon = document.getElementById('mobile-search-icon');
+  const searchBox = document.querySelector('.search-box');
+  const navbarCenter = document.querySelector('.navbar-center');
+
+  document.addEventListener('click', function (e) {
+    if (window.innerWidth <= 600) {
+      const isClickInsideSearch = searchBox.contains(e.target);
+
+      if (!isClickInsideSearch) {
+        searchBox.classList.remove('active');
+        navbarCenter.classList.remove('hide-nav');
+      }
+    }
+  });
+
+  searchIcon.addEventListener('click', function (e) {
+    e.stopPropagation(); // prevent click from propagating to document
+    if (window.innerWidth <= 600) {
+      searchBox.classList.toggle('active');
+      navbarCenter.classList.toggle('hide-nav');
+    }
+  });
+});
+
+//==================================================================================================================================================================================
 //  EDUCATION SECTION
 
 const addEducationBtn = document.getElementById('addEducationBtn');
