@@ -59,6 +59,7 @@ a
 .navbar .navbar-left .search-box i
 {
     font-size: 16px;
+    cursor: pointer;
 }
 
 .navbar .navbar-left .search-box input
@@ -104,9 +105,10 @@ a
     width: 100%;
 }
 
-.navbar .navbar-center ul li a img
+.navbar .navbar-center ul li a i
 {
-    width: 30px;
+    font-size: 14px;
+    margin-right: 5px;
 }
 
 /* Navigation Bar Right */
@@ -299,12 +301,27 @@ a
     width: 30px;
 }
 
-.toggle_btn 
+/* Navbar icon toggle */
+.navbar .navbar-icon-toggle{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+    display: none;
+}
+
+.navbar .navbar-icon-toggle:hover{
+    background-color: #f0f2f5;
+}
+
+.navbar .navbar-icon-toggle i 
 {
     cursor: pointer;
     color: black;
     font-size: 25px;
-    display: none;
 }
 
 /* Show navbar icon and hide menu links for screens <= 1000px */
@@ -327,6 +344,59 @@ a
     }
 }
 
+@media (max-width: 600px) {
+    .navbar .navbar-center ul li a span{
+        display: none;
+    }
+
+    .navbar .navbar-center ul li a{
+        padding-right: 0;
+        margin: 5px;
+    }
+
+    .navbar .navbar-icon-toggle{
+        display: flex;
+    }
+
+    .nav-profile-img{
+        width: 30px;
+    }
+
+    .navbar .navbar-left .search-box{
+        background: transparent;
+        width: auto;
+        padding: 0;
+    }
+
+    .navbar .search-box .search-input {
+        display: none;
+        width: 100%;
+        background: #f0f2f5;
+        padding: 8px 10px;
+        border-radius: 20px;
+        border: none;
+    }
+
+    .navbar .search-box.active .search-input {
+        display: block;
+        background: #f0f2f5;
+        width: 250px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        margin-left: 7px;
+    }
+
+    .navbar .navbar-center {
+        display: flex;
+    }
+
+    .navbar .hide-nav {
+        display: none;
+  }
+    
+}
+
 @media (max-width: 500px) {
 
     .dropdown_menu 
@@ -338,47 +408,6 @@ a
         width: 100%;
     }
     
-}
-
-/* Make dropdown menu slide in from the right */
-.dropdown_menu.active 
-{
-    left: 0; /* Slide in when active */
-}
-
-/* Media query */
-@media (max-width: 600px) {
-    .navbar .navbar-left .search-box{
-        background: transparent;
-        width: auto;
-        padding: 0;
-    }
-
-    .navbar .navbar-left .search-box input{
-        width: 0;
-        padding: 0;
-    }
-
-    .navbar .navbar-center ul li a span{
-        display: none;
-    }
-
-    .navbar .navbar-center ul li a{
-        padding-right: 0;
-        margin: 5px;
-    }
-
-    .nav-profile-img{
-        width: 30px;
-    }
-
-    .container{
-        padding: 15px 3%;
-    }    
-
-    .container .right-sidebar{
-        display: none;
-    }
 }
 
 
@@ -472,7 +501,7 @@ a
     object-fit: cover;
     position: relative;
     top: 38%;
-    right: 115%;
+    right: 125%;
 }
 
 /* Profile Image Upload button */
@@ -546,6 +575,7 @@ a
 {
     display: flex;
     align-items: center;
+    justify-content: center;
     border-top: 1px solid #ccc;
 }
 
@@ -584,54 +614,25 @@ a
     margin: 12px 0;
 }
 
-.container .left-sidebar .sidebar-activity h3
-{
-    font-size: 14px;
-    color: #777;
-    font-weight: 600;
-    margin: 20px 0 10px;
-}
-
 .container .left-sidebar .sidebar-activity a
 {
     display: flex;
     align-items: center;
-    font-size: 12px;
+    font-size: 15px;
     font-weight: 600;
-    color: #888;
-    margin: 3px 0;
+    color:#0a66c2;
+    margin: 17px 0;
 }
 
 .container .left-sidebar .sidebar-activity a:hover
 {
-    color: purple;
     text-decoration: underline;
 }
 
-.container .left-sidebar .sidebar-activity a img
+.container .left-sidebar .sidebar-activity a i
 {
-    width: 20px;
+    font-size: 20px;
     margin-right: 10px;
-}
-
-.container .left-sidebar .sidebar-activity .discover-more-link
-{
-    margin: 25px -25px 0;
-    border-top: 1px solid #ccc;
-    text-align: center;
-}
-
-.container .left-sidebar .sidebar-activity .discover-more-link a
-{
-    color: #045be6;
-    display: block;
-    margin: 10px 0;
-}
-
-.container .left-sidebar .sidebar-activity .discover-more-link a:hover
-{
-    color: purple;
-    text-decoration: underline;
 }
 
 /*===========================================================================================================================================================================================*/
@@ -846,13 +847,6 @@ margin-top: 10px;
     background-color: #f0f2f5;
 }
 
-/*.comment-user-info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 30px;
-}*/
-
 .comment-user-info img {
   width: 40px;      
   height: 40px;      
@@ -959,7 +953,7 @@ margin-top: 10px;
 
 .container .right-sidebar .sidebar-news .info-icon
 {
-    width: 15px;
+    font-size: 15px;
     float: right;
     margin-top: 15px;
 }
@@ -1086,3 +1080,61 @@ margin-top: 10px;
     margin-right: 4px;
 }
 /* --------------------------- Container End --------------------------- */
+
+/* Media query */
+@media (max-width: 600px) {
+    .container{
+        padding: 15px 3%;
+    }    
+
+    .container .right-sidebar{
+        display: none;
+    }
+
+    .container .left-sidebar {
+       position: fixed;
+       top: 73px;
+       left: 0;
+       display: none;
+       width: 50%;
+       z-index: 1000;
+       transition: all 0.3s ease;
+    }
+
+    /* When toggled */
+    .container .left-sidebar.toggled {
+       display: block;
+    }
+
+    .container .left-sidebar .sidebar-profile-box .cover-image
+    {
+       height: 100px;
+    }
+
+    .container .left-sidebar .sidebar-profile-box .cover-image-container .upload-btn 
+    {
+        display: none;
+    }
+
+    .container .left-sidebar .sidebar-profile-box .sidebar-profile-info .profile-image-container .profile-image {
+       width: 70px;
+       height: 70px;
+       right: 0;
+       top: 50%;
+    }
+
+    .container .left-sidebar .sidebar-profile-box .sidebar-profile-info .profile-image-container .profile-upload-btn
+    {
+       display: none;
+    }
+
+    .container .main-content .create-post{
+        width: 150%;
+        margin: 0 auto;
+    }
+
+    .container .main-content .post{
+        width: 150%;
+        margin: 0 auto;
+    }
+}

@@ -19,18 +19,19 @@
             <a href="Main Page.html" class="logo"><img src="images/logo.png" alt="LinkedIn logo"></a>
 
             <div class="search-box">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" placeholder="Search">
+                <i class="fa-solid fa-magnifying-glass" id="mobile-search-icon"></i>
+                <input type="text" placeholder="Search" class="search-input">
             </div>
+
 
         </div>
         <div class="navbar-center">
             <ul>
-                <li><a href="#" class="active-link"><img src="images/home.png"> <span>Home</span></a></li>
-                <li><a href="#"><img src="images/network.png"> <span>My Network</span></a></li>
-                <li><a href="#"><img src="images/jobs.png"> <span>Jobs</span></a></li>
-                <li><a href="#"><img src="images/message.png"> <span>Messaging</span></a></li>
-                <li><a href="#"><img src="images/notification.png"> <span>Notifications</span></a></li>
+                <li><a href="#" class="active-link"><i class="fa-solid fa-house"></i> <span>Home</span></a></li>
+                <li><a href="#"><i class="fa-solid fa-users"></i> <span>My Network</span></a></li>
+                <li><a href="#"><i class="fa-solid fa-briefcase"></i> <span>Jobs</span></a></li>
+                <li><a href="#"><i class="fa-solid fa-envelope"></i> <span>Messaging</span></a></li>
+                <li><a href="#"><i class="fa-solid fa-bell"></i> <span>Notifications</span></a></li>
             </ul>
         </div>
 
@@ -85,6 +86,10 @@
             </div>
         </div>
 
+        <div class="navbar-icon-toggle">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+
     </nav>
     <!-- / ------------------------ Navigation Bar End ------------------------ / -->
 
@@ -118,29 +123,14 @@
                     </ul>
                 </div>
                 <div class="sidebar-profile-link">
-                    <a href="#"><img src="images/items.png"> My items</a>
                     <a href="#"><img src="images/premium.png"> Try Premium</a>
                 </div>
             </div>
             <div class="sidebar-activity">
-                <h3>RECENT</h3>
-                <a href="#"><img src="images/recent.png"> Web Development</a>
-                <a href="#"><img src="images/recent.png"> User Interface</a>
-                <a href="#"><img src="images/recent.png"> Online Learning</a>
-                <a href="#"><img src="images/recent.png"> Learn Online</a>
-                <a href="#"><img src="images/recent.png"> Group Learning</a>
-                <h3>GROUPS</h3>
-                <a href="#"><img src="images/group.png"> Web Design Group</a>
-                <a href="#"><img src="images/group.png"> HTML & CSS Learners</a>
-                <a href="#"><img src="images/group.png"> PYTHON & JAVASCRIPT Group</a>
-                <a href="#"><img src="images/group.png"> Learn Coding Online</a>
-                <h3>HASHTAG</h3>
-                <a href="#"><img src="images/hashtag.png"> webdevelopment</a>
-                <a href="#"><img src="images/hashtag.png"> userinterfaces</a>
-                <a href="#"><img src="images/hashtag.png"> onlinelearning</a>
-                <div class="discover-more-link">
-                    <a href="#">Discover More</a>
-                </div>
+                <a href="#"><i class="fa-solid fa-bookmark"></i> Saved Items</a>
+                <a href="#"><i class="fa-solid fa-people-group"></i> Groups</a>
+                <a href="#"><i class="fa-solid fa-newspaper"></i> Newsletters</a>
+                <a href="#"><i class="fa-solid fa-calendar"></i> Events</a>
             </div>    
         </div>
 
@@ -166,7 +156,7 @@
                     <div class="post-preview">
                         <img id="image-preview"/>
                     </div>
-            </div>
+                </div>
 
                <!-- Posts Section -->
                 <div id="posts-feed" class="posts-feed">
@@ -193,7 +183,7 @@
         <!-- Right Sidebar -->
         <div class="right-sidebar">
             <div class="sidebar-news">
-                <img src="images/more.png" class="info-icon">
+                <i class="fa-solid fa-circle-exclamation info-icon"></i>
                 <h3>Trending News</h3>
                 <a href="#">High demand for skilled manpower</a>
                 <span>1d ago &middot; 10,934 readers</span>

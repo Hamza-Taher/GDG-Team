@@ -78,6 +78,35 @@
             }
         });
 
+//==================================================================================================================================================================================
+
+// Search input at smaller screens
+document.addEventListener('DOMContentLoaded', function () {
+  const searchIcon = document.getElementById('mobile-search-icon');
+  const searchBox = document.querySelector('.search-box');
+  const navbarCenter = document.querySelector('.navbar-center');
+
+  document.addEventListener('click', function (e) {
+    if (window.innerWidth <= 600) {
+      const isClickInsideSearch = searchBox.contains(e.target);
+
+      if (!isClickInsideSearch) {
+        searchBox.classList.remove('active');
+        navbarCenter.classList.remove('hide-nav');
+      }
+    }
+  });
+
+  searchIcon.addEventListener('click', function (e) {
+    e.stopPropagation(); // prevent click from propagating to document
+    if (window.innerWidth <= 600) {
+      searchBox.classList.toggle('active');
+      navbarCenter.classList.toggle('hide-nav');
+    }
+  });
+});
+        
+
 //====================================================================================================================================================
 // Add name, description, location of user we get from Profile Page
 
@@ -125,7 +154,60 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
   
-//====================================================================================================================================================
+//==================================================================================================================================================================
+// Left sidebar in smaller screens
+
+  function mergeSidebarOnSmallScreen() {
+    const sidebarBox = document.querySelector('.sidebar-profile-box');
+    const sidebarActivity = document.querySelector('.sidebar-activity');
+
+    // Merge only if screen width is <= 600px and not already merged
+    if (window.innerWidth <= 600 && sidebarBox && sidebarActivity && !sidebarBox.contains(sidebarActivity)) {
+      sidebarBox.appendChild(sidebarActivity);
+    }
+
+    // Separate them again if screen gets larger
+    if (window.innerWidth > 600 && sidebarBox && sidebarActivity && sidebarBox.contains(sidebarActivity)) {
+      const container = document.querySelector('.left-sidebar');
+      if (container) {
+        container.appendChild(sidebarActivity);
+      }
+    }
+  }
+
+  // Run on page load
+  document.addEventListener('DOMContentLoaded', mergeSidebarOnSmallScreen);
+
+  // Run on resize
+  window.addEventListener('resize', mergeSidebarOnSmallScreen);
+
+
+  document.addEventListener('DOMContentLoaded', function () {
+  const toggleBtn = document.querySelector('.navbar-icon-toggle');
+  const sidebar = document.querySelector('.left-sidebar');
+
+  // Toggle sidebar on nav icon click
+  toggleBtn.addEventListener('click', function (event) {
+    event.stopPropagation(); // prevent this click from closing sidebar
+    if (window.innerWidth <= 600) {
+      sidebar.classList.toggle('toggled');
+    }
+  });
+
+  // Prevent clicks inside the sidebar from closing it
+  sidebar.addEventListener('click', function (event) {
+    event.stopPropagation();
+  });
+
+  // Hide sidebar if clicking outside
+  document.addEventListener('click', function () {
+    if (window.innerWidth <= 600 && sidebar.classList.contains('toggled')) {
+      sidebar.classList.remove('toggled');
+    }
+  });
+});
+
+//==================================================================================================================================================================
 
 /* Post & Comment */
 let currentCommentPost = null;
